@@ -1,0 +1,91 @@
+name: notchVpn
+options:
+  bundleIdPrefix: com.egor.notchVpn
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  defaultConfig: Debug
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    SWIFT_STRICT_CONCURRENCY: complete
+    DEAD_CODE_STRIPPING: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: NO
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGN_IDENTITY: "-"
+
+targets:
+  notchVpn:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/notchVpn
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/notchVpn.entitlements"
+    resources:
+      - path: Sources/notchVpn/Resources/Assets.xcassets
+    info:
+      path: Sources/notchVpn/Resources/Info.plist
+      properties:
+        CFBundleName: notchVpn
+        CFBundleDisplayName: notchVpn
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        CFBundleIdentifier: "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundlePackageType: APPL
+        LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+        LSUIElement: true
+        NSHumanReadableCopyright: "© 2026"
+        NSSupportsAutomaticTermination: false
+        NSSupportsSuddenTermination: false
+    entitlements:
+      path: Sources/notchVpn/Resources/notchVpn.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.network.client: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.egor.notchVpn
+        PRODUCT_NAME: notchVpn
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        ENABLE_HARDENED_RUNTIME: YES
+        COMBINE_HIDPI_IMAGES: YES
+
+  notchVpnTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: Tests/notchVpnTests
+    dependencies:
+      - target: notchVpn
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.egor.notchVpn.tests
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/notchVpn.app/Contents/MacOS/notchVpn"
+
+schemes:
+  notchVpn:
+    build:
+      targets:
+        notchVpn: all
+        notchVpnTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - notchVpnTests
+    archive:
+      config: Release
